@@ -28,6 +28,9 @@
             android:exported="true" >
             <!-- No intent filter here -->
         </activity>
+        <activity android:name=".SignUpActivity">
+
+        </activity>
 
 
     </application>
