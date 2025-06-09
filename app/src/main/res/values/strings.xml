@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">fot_daily</string>
+    <string name="splash_screen">Splash screen image</string>
 </resources>
