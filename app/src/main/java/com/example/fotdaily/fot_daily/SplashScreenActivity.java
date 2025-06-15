@@ -1,4 +1,5 @@
 package com.example.fotdaily.fot_daily;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,9 +13,20 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            // Redirect to the SignUpActivity after the splash screen
+            Intent intent = new Intent(SplashScreenActivity.this, SignUpActivity.class); // Change to SignUpActivity
             startActivity(intent);
-            finish();
+            finish(); // Close the splash screen activity so it's removed from the stack
         }, 3000); // 3 seconds delay
     }
 }
+
+
+
+
+
+
+
+
+
+
