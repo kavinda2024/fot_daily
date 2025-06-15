@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewNewsActivity">
+
+    <!-- ScrollView to allow content to scroll if it exceeds screen height -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="63dp"  android:contentDescription="@string/desc_scrollable_news_content">
+        <!-- The BottomNavigationView height is 63dp, so using that directly -->
+
+
+        <!-- THIS LinearLayout is  INSIDE NestedScrollView -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <!-- News Card 1: FOT CAREER FEST -->
+            <include
+                android:id="@+id/news_card_career_fest_container"
+                layout="@layout/item_news_card1" />
+
+            <!-- News Card 2: TECHNO GAME FEST -->
+            <include
+                android:id="@+id/news_card_techno_game_container"
+                layout="@layout/item_news_card2" />
+
+            <!-- News Card 3: FOT SYMPOSIUM -->
+            <include
+                android:id="@+id/news_card_fot_symposium_container"
+                layout="@layout/item_news_card3" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:layout_gravity="bottom"
+        android:background="@color/cyan"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".ViewNewsActivity">-->
+<!--    &lt;!&ndash; ScrollView to allow content to scroll if it exceeds screen height &ndash;&gt;-->
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/nestedScrollView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginBottom="?attr/actionBarSize"> &lt;!&ndash; Space for the BottomNavigationView &ndash;&gt;-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+<!--    &lt;!&ndash; Bottom Navigation Bar &ndash;&gt;-->
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navigation_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="63dp"-->
+<!--        android:layout_gravity="bottom"-->
+
+<!--        android:background="@color/cyan"-->
+<!--        app:menu="@menu/bottom_nav_menu" />-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingTop="8dp"-->
+<!--        android:paddingBottom="8dp"-->
+<!--        app:layout_anchor="@+id/nestedScrollView"-->
+<!--        app:layout_anchorGravity="center">-->
+
+<!--        &lt;!&ndash; News Card 1: FOT CAREER FEST &ndash;&gt;-->
+
+<!--        <include-->
+<!--            android:id="@+id/news_card_career_fest_container"-->
+<!--            layout="@layout/item_news_card1" />-->
+
+<!--        &lt;!&ndash; News Card 2: TECHNO GAME FEST &ndash;&gt;-->
+
+<!--        <include-->
+<!--            android:id="@+id/news_card_techno_game_container"-->
+<!--            layout="@layout/item_news_card2" />-->
+
+<!--        &lt;!&ndash; News Card 3: FOT SYMPOSIUM &ndash;&gt;-->
+
+<!--        <include-->
+<!--            android:id="@+id/news_card_fot_symposium_container"-->
+<!--            layout="@layout/item_news_card3" />-->
+
+<!--    </LinearLayout> &lt;!&ndash; Ensure bottom_nav_menu.xml exists in res/menu &ndash;&gt;-->
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+<!--&lt;!&ndash;    android:background="@color/cyan"&ndash;&gt;-->

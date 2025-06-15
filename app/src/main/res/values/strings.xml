@@ -1,4 +1,115 @@
 <resources>
     <string name="app_name">fot_daily</string>
     <string name="splash_screen">Splash screen image</string>
+
+    <!-- ... other strings ... -->
+    <string name="menu_sports">Sports</string>
+    <string name="menu_academic">Academic</string>
+    <string name="menu_events">Events</string>
+    <string name="menu_profile">Profile</string> <!-- ADDED THIS LINE -->
+
+    <!-- News Card 1: FOT CAREER FEST -->
+    <string name="news_title_career_fest">FOT CAREER FEST</string>
+    <string name="news_date_career_fest">2025/6/5</string>
+    <string name="cd_news_image_career_fest">Image for FOT Career Fest</string>
+
+    <!-- News Card 2: TECHNO GAME FEST -->
+    <string name="news_title_techno_game">TECHNO GAME FEST</string>
+    <string name="news_date_techno_game">2025/6/2</string>
+    <string name="cd_news_image_techno_game">Image for Techno Game Fest</string>
+
+    <!-- News Card 3: FOT SYMPOSIUM -->
+    <string name="news_title_fot_symposium">FOT SYMPOSIUM</string>
+    <string name="news_date_fot_symposium">2025/6/1</string>
+    <string name="cd_news_image_fot_symposium">Image for FOT Symposium</string>
+    <string name="desc_scrollable_news_content">Scrollable area for news articles</string>
+
+
+        <!-- ... other strings ... -->
+        <string name="desc_news_detail_image">Full image for the news article</string>
+
+    <string name="desc_scrollable_academic_news_content">Scrollable list of academic news articles.</string>
+    <string name="desc_scrollable_sports_news_content">Scrollable list of sports news articles.</string>
+
+    <string name="title_academic_news_section">Academic News</string>
+    <string name="title_sports_news_section">Sports News</string>
+    <string name="cd_sports_news_image_placeholder">Image related to sports news</string>
+    <string name="cd_academic_news_image_placeholder">Image related to academic news</string>
+
+    <!-- Profile Page Strings -->
+    <string name="user_info_title">User info</string>
+    <string name="label_username">Username:</string>
+    <string name="label_email">Email:</string>
+
+    <string name="button_edit_profile">Edit profile</string>
+    <string name="button_sign_out">Sign out</string>
+    <string name="button_home">HOME</string>
+    <string name="cd_user_icon">User profile icon</string>
+    <string name="cd_app_logo">FOT Daily app logo</string>
+
+    <string name="sign_out_dialog_title">Confirm Sign Out</string>
+    <string name="sign_out_dialog_message">Do you really want to sign out?</string>
+    <string name="sign_out_dialog_yes">Yes</string>
+    <string name="sign_out_dialog_no">No</string>
+
+
+    <string name="signup_successful_verify_email">Sign-up successful! A verification email has been sent to your inbox.</string>
+    <string name="signup_successful_but_verification_failed">Sign-up successful, but failed to send verification email. Please try verifying later.</string>
+    <string name="signup_successful_profile_issue_verify_email">Account created, but profile update failed. A verification email has been sent.</string>
+    <string name="signup_successful_profile_issue_no_verification">Account created, but profile update and verification failed.</string>
+
+
+
+
+
+
+
+    <!-- Strings for EditProfileActivity -->
+    <string name="edit_profile_title">Edit Your Profile</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_email">Email</string>
+    <string name="button_save_changes">Save Changes</string>
+
+    <!-- You might also want strings for Toast messages used in EditProfileActivity.java -->
+    <string name="profile_updated_successfully">Profile updated successfully</string>
+    <string name="profile_update_failed">Failed to update profile</string>
+    <string name="email_update_failed">Failed to update email. Please re-authenticate if prompted.</string>
+    <string name="user_not_logged_in">User not logged in. Please login again.</string>
+    <string name="could_not_load_user_data">Could not load user data.</string>
+    <string name="enter_username">Please enter a username</string>
+    <string name="enter_valid_email">Please enter a valid email address</string>
+    <string name="no_changes_detected">No changes detected</string>
+    <string name="button_discard_changes">Discard Changes</string>
+
+
+    <string name="profile_updated_db_display_name_failed">Profile updated in DB, but display name update failed.</string>
+
+
+    <!-- Re-authentication Dialog Strings -->
+    <string name="reauth_title">Re-authentication Required</string>
+    <string name="reauth_message">For security reasons, please re-enter your current password to proceed with email or other sensitive changes.</string>
+    <string name="reauth_password_hint">Current Password</string>
+    <string name="reauth_confirm_button">Confirm</string>
+    <string name="reauth_cancel_button">Cancel</string>
+    <string name="reauth_password_empty">Password cannot be empty.</string>
+    <string name="reauth_failed">Re-authentication failed</string>
+    <string name="reauth_cancelled">Re-authentication cancelled.</string>
+
+
+
+    <string name="dev_info_title">Dev info</string>
+    <string name="dev_name_label">Name:</string>
+    <string name="dev_name_value">Kavinda Nelumdeniya</string>
+    <string name="dev_student_no_label">Student no :</string>
+    <string name="dev_student_no_value">2022t01557</string>
+    <string name="dev_personal_statement_label">Personal statement:</string>
+    <string name="dev_personal_statement_value">This app provides updated information about the latest news in FOT UOC.</string>
+    <string name="dev_release_version_label">Release version:</string>
+    <string name="dev_release_version_value">v1.0.3</string>
+    <string name="cd_dev_profile_image">Developer profile image</string>
+
+    <string name="link_see_dev_info">See developer info</string>
+
+
+
 </resources>

@@ -4,6 +4,10 @@
         <!-- Customize your light theme here. -->
         <!-- Define the primary colors, text colors, etc., here -->
 
+
+
+
+
         <!-- Button background and text color customization -->
         <item name="colorPrimary">@color/cyan</item>  <!-- Set the primary color for the app -->
         <item name="colorPrimaryVariant">@color/cyan</item>  <!-- Set the primary variant -->
@@ -13,12 +17,28 @@
         <item name="buttonStyle">@style/CustomButtonStyle</item> <!-- Apply custom button style -->
     </style>
 
-    <!-- Custom button style -->
+    <style name="CustomButtonStyle2">
+        <item name="android:background">@color/black</item>  <!-- Set button background to black for better contrast -->
+        <item name="android:textColor">@android:color/white</item>  <!-- Set button text color to white -->
+
+    </style>
+
+
     <style name="CustomButtonStyle">
         <item name="android:background">@color/darkCyan</item>  <!-- Set button background to dark cyan for better contrast -->
         <item name="android:textColor">@android:color/white</item>  <!-- Set button text color to white -->
 
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+
     <style name="Theme.Fot_daily" parent="Base.Theme.Fot_daily" />
-</resources>
+
+
+
+        </resources>

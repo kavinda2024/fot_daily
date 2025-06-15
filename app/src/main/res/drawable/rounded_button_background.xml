@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="10dp" /> <!-- Adjust radius as needed for your design -->
+            <!-- The solid color here can be set to a default, but it's typically overridden by 'android:background'
+                 or 'android:backgroundTint' on the button itself. -->
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</selector>
