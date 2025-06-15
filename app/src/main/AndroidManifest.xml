@@ -26,11 +26,48 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" >
-            <!-- No intent filter here -->
-        </activity>
-        <activity android:name=".SignUpActivity">
+
 
         </activity>
+        <activity android:name=".SignUpActivity">
+        </activity>
+        <activity android:name=".LoginActivity" android:exported="true">
+            <!-- No intent filter for LoginActivity -->
+        </activity>
+        <activity
+            android:name=".ViewNewsActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".NewsDetailActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".ViewAcademicNewsActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ViewSportsNewsActivity"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false">
+
+        </activity>
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".DevInfoActivity"
+            android:exported="false">
+        </activity>
+
 
 
     </application>

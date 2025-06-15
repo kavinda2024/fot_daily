@@ -6,6 +6,7 @@
         <!-- Custom Colors -->
         <color name="darkNavy">#1A1F3C</color>  <!-- Dark Navy color -->
         <color name="cyan">#00FFFF</color>      <!-- cyan color -->
-        <color name="darkCyan">#008B8B</color>  <!-- Darker Cyan color for better contrast -->
+        <color name="darkCyan">#008B8B</color> <!-- Example for icon/text tint -->
+    <color name="grey">#888888</color>  <!-- Darker Cyan color for better contrast -->
 
 </resources>

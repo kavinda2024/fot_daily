@@ -39,6 +39,9 @@ dependencies {
     implementation(libs.activity) // androidx.activity:activity
     implementation(libs.constraintlayout) // androidx.constraintlayout:constraintlayout
 
+    implementation("androidx.recyclerview:recyclerview:1.2.1")  // or the latest version
+    // Other dependencies...
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
 // Firebase Authentication
@@ -49,6 +52,8 @@ dependencies {
 
     // Add CardView explicitly for CardView component
     implementation("androidx.cardview:cardview:1.0.0") // For CardView
+
+    implementation ("com.github.bumptech.glide:glide:4.16.0") //for glide view
 
     // Testing dependencies
     testImplementation(libs.junit) // junit:junit

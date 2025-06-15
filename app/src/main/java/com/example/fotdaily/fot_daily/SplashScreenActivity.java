@@ -13,20 +13,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(() -> {
-            // Redirect to the SignUpActivity after the splash screen
-            Intent intent = new Intent(SplashScreenActivity.this, SignUpActivity.class); // Change to SignUpActivity
+            // Redirect to the LoginActivity after the splash screen
+            Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class); // Change to LoginActivity
             startActivity(intent);
             finish(); // Close the splash screen activity so it's removed from the stack
         }, 3000); // 3 seconds delay
     }
 }
-
-
-
-
-
-
-
-
-
-

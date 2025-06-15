@@ -2,6 +2,7 @@ package com.example.fotdaily.fot_daily;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,14 +12,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    private static final String TAG = "SignUpActivity"; // Define a TAG for logging
+
     private EditText usernameEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     private Button signUpButton;
-    private ProgressBar progressBar;  // ProgressBar to show loading state
+    private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -30,7 +35,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth and Realtime Database
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // --- IMPORTANT: Ensure the URL is correct and without brackets. ---
+        mDatabase = FirebaseDatabase.getInstance("https://fotnews-app-project-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         // Get references to the UI elements
         usernameEditText = findViewById(R.id.username);
@@ -38,9 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         confirmPasswordEditText = findViewById(R.id.confirm_password);
         signUpButton = findViewById(R.id.signUpButton);
-        progressBar = findViewById(R.id.progressBar);  // Initialize the ProgressBar
+        progressBar = findViewById(R.id.progressBar);
 
-        // Initially hide the ProgressBar
         progressBar.setVisibility(View.GONE);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString().trim();
                 String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
-                // Validate the input
                 if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
                     return;
@@ -62,56 +66,134 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Show ProgressBar while sign-up is in progress
-                progressBar.setVisibility(View.VISIBLE);
+                if (password.length() < 6) {
+                    Toast.makeText(SignUpActivity.this, "Password should be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                // Create a new user with Firebase Authentication
+                progressBar.setVisibility(View.VISIBLE);
+                Log.d(TAG, "Starting user creation for email: " + email);
+
                 signUpUser(username, email, password);
             }
         });
     }
 
     private void signUpUser(final String username, String email, String password) {
-        // Create new user with Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
-                    // Hide the ProgressBar after operation completes
-                    progressBar.setVisibility(View.GONE);
-
                     if (task.isSuccessful()) {
-                        // User signed up successfully, store their information in Realtime Database
-                        String userId = mAuth.getCurrentUser().getUid();
-                        User user = new User(username, email); // Create a User object
+                        Log.d(TAG, "createUserWithEmailAndPassword SUCCESS.");
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        if (currentUser != null) {
+                            Log.d(TAG, "Current user UID: " + currentUser.getUid());
+                            Log.d(TAG, "Attempting to set display name: " + username);
 
-                        mDatabase.child("users").child(userId).setValue(user)
-                                .addOnCompleteListener(task1 -> {
-                                    if (task1.isSuccessful()) {
-                                        // Display success message
-                                        Toast.makeText(SignUpActivity.this, "Sign-up successful", Toast.LENGTH_SHORT).show();
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(username)
+                                    .build();
 
-                                        // Optionally, redirect the user to MainActivity or another activity
-                                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();  // Close SignUpActivity
-                                    } else {
-                                        // If storing user data fails
-                                        Toast.makeText(SignUpActivity.this, "Failed to store user data.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                            currentUser.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(profileTask -> {
+                                        if (profileTask.isSuccessful()) {
+                                            Log.d(TAG, "updateProfile SUCCESS: Display name set.");
+                                            String userId = currentUser.getUid();
+                                            User user = new User(username, email);
+                                            Log.d(TAG, "Attempting to save user data to Realtime Database for UID: " + userId);
+
+                                            mDatabase.child("users").child(userId).setValue(user)
+                                                    .addOnCompleteListener(dbTask -> {
+                                                        progressBar.setVisibility(View.GONE);
+                                                        if (dbTask.isSuccessful()) {
+                                                            Log.d(TAG, "Realtime Database setValue SUCCESS.");
+
+                                                            // --- NEW: Send email verification ---
+                                                            currentUser.sendEmailVerification()
+                                                                    .addOnCompleteListener(verificationTask -> {
+                                                                        if (verificationTask.isSuccessful()) {
+                                                                            Log.d(TAG, "Email verification sent to " + currentUser.getEmail());
+                                                                            Toast.makeText(SignUpActivity.this,
+                                                                                    getString(R.string.signup_successful_verify_email), // New string
+                                                                                    Toast.LENGTH_LONG).show();
+                                                                        } else {
+                                                                            Log.e(TAG, "Failed to send verification email.", verificationTask.getException());
+                                                                            Toast.makeText(SignUpActivity.this,
+                                                                                    getString(R.string.signup_successful_but_verification_failed), // New string
+                                                                                    Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                        // After attempting to send verification or failure, redirect
+                                                                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                                                        startActivity(intent);
+                                                                        finish();
+                                                                    });
+                                                        } else {
+                                                            Log.e(TAG, "Realtime Database setValue FAILED: " + dbTask.getException().getMessage());
+                                                            Toast.makeText(SignUpActivity.this, "Failed to store user data in database.", Toast.LENGTH_SHORT).show();
+                                                            // Redirect even if DB write failed
+                                                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+                                        } else {
+                                            progressBar.setVisibility(View.GONE);
+                                            Log.e(TAG, "updateProfile FAILED: " + profileTask.getException().getMessage());
+                                            Toast.makeText(SignUpActivity.this, "Failed to update user display name: " + profileTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                            // Even if display name update fails, proceed to store in DB as it's a separate concern
+                                            String userId = currentUser.getUid();
+                                            User user = new User(username, email);
+                                            mDatabase.child("users").child(userId).setValue(user)
+                                                    .addOnCompleteListener(dbTask -> {
+                                                        progressBar.setVisibility(View.GONE);
+                                                        if (dbTask.isSuccessful()) {
+                                                            // Attempt to send verification even if profile update failed
+                                                            currentUser.sendEmailVerification()
+                                                                    .addOnCompleteListener(verificationTask -> {
+                                                                        if (verificationTask.isSuccessful()) {
+                                                                            Toast.makeText(SignUpActivity.this,
+                                                                                    getString(R.string.signup_successful_profile_issue_verify_email), // New string
+                                                                                    Toast.LENGTH_LONG).show();
+                                                                        } else {
+                                                                            Toast.makeText(SignUpActivity.this,
+                                                                                    getString(R.string.signup_successful_profile_issue_no_verification), // New string
+                                                                                    Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                                                        startActivity(intent);
+                                                                        finish();
+                                                                    });
+                                                        } else {
+                                                            Toast.makeText(SignUpActivity.this, "Account created, but profile update and data storage failed.", Toast.LENGTH_LONG).show();
+                                                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+                                        }
+                                    });
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            Log.e(TAG, "User creation successful but current user is null.");
+                            Toast.makeText(SignUpActivity.this, "User creation successful but user object is null. Please try again.", Toast.LENGTH_SHORT).show();
+                            // Redirect to login anyway
+                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
-                        // If sign-up fails, display a message to the user
+                        progressBar.setVisibility(View.GONE);
+                        Log.e(TAG, "createUserWithEmailAndPassword FAILED: " + task.getException().getMessage());
                         Toast.makeText(SignUpActivity.this, "Sign-up failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    // User class to store user data
     public static class User {
         public String username;
         public String email;
 
         public User() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
         public User(String username, String email) {
@@ -125,43 +207,32 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
 //package com.example.fotdaily.fot_daily;
 //
+//import android.content.Intent;
 //import android.os.Bundle;
+//import android.util.Log; // Make sure this is imported
 //import android.view.View;
 //import android.widget.Button;
 //import android.widget.EditText;
+//import android.widget.ProgressBar;
 //import android.widget.Toast;
 //
 //import androidx.appcompat.app.AppCompatActivity;
 //
 //import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.UserProfileChangeRequest;
 //import com.google.firebase.database.DatabaseReference;
 //import com.google.firebase.database.FirebaseDatabase;
 //
 //public class SignUpActivity extends AppCompatActivity {
 //
+//    private static final String TAG = "SignUpActivity"; // Define a TAG for logging
+//
 //    private EditText usernameEditText, emailEditText, passwordEditText, confirmPasswordEditText;
 //    private Button signUpButton;
+//    private ProgressBar progressBar;
 //
 //    private FirebaseAuth mAuth;
 //    private DatabaseReference mDatabase;
@@ -173,7 +244,8 @@ public class SignUpActivity extends AppCompatActivity {
 //
 //        // Initialize Firebase Auth and Realtime Database
 //        mAuth = FirebaseAuth.getInstance();
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        // --- IMPORTANT CHANGE HERE ---
+//        mDatabase = FirebaseDatabase.getInstance("https://fotnews-app-project-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 //
 //        // Get references to the UI elements
 //        usernameEditText = findViewById(R.id.username);
@@ -181,6 +253,9 @@ public class SignUpActivity extends AppCompatActivity {
 //        passwordEditText = findViewById(R.id.password);
 //        confirmPasswordEditText = findViewById(R.id.confirm_password);
 //        signUpButton = findViewById(R.id.signUpButton);
+//        progressBar = findViewById(R.id.progressBar);
+//
+//        progressBar.setVisibility(View.GONE);
 //
 //        signUpButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -190,7 +265,6 @@ public class SignUpActivity extends AppCompatActivity {
 //                String password = passwordEditText.getText().toString().trim();
 //                String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 //
-//                // Validate the input
 //                if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 //                    Toast.makeText(SignUpActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
 //                    return;
@@ -201,49 +275,17 @@ public class SignUpActivity extends AppCompatActivity {
 //                    return;
 //                }
 //
-//                // Create a new user with Firebase Authentication
+//                if (password.length() < 6) {
+//                    Toast.makeText(SignUpActivity.this, "Password should be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                progressBar.setVisibility(View.VISIBLE);
+//                Log.d(TAG, "Starting user creation for email: " + email);
+//
 //                signUpUser(username, email, password);
 //            }
 //        });
 //    }
 //
-//    private void signUpUser(final String username, String email, String password) {
-//        // Create new user with Firebase Authentication
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, task -> {
-//                    if (task.isSuccessful()) {
-//                        // User signed up successfully, store their information in Realtime Database
-//                        String userId = mAuth.getCurrentUser().getUid();
-//                        User user = new User(username, email); // Create a User object
 //
-//                        mDatabase.child("users").child(userId).setValue(user)
-//                                .addOnCompleteListener(task1 -> {
-//                                    if (task1.isSuccessful()) {
-//                                        Toast.makeText(SignUpActivity.this, "Sign-up successful", Toast.LENGTH_SHORT).show();
-//                                        // Proceed to next activity (e.g., login or home page)
-//                                    } else {
-//                                        Toast.makeText(SignUpActivity.this, "Failed to store user data.", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                });
-//                    } else {
-//                        // If sign-up fails, display a message to the user
-//                        Toast.makeText(SignUpActivity.this, "Sign-up failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//    }
-//
-//    // User class to store user data
-//    public static class User {
-//        public String username;
-//        public String email;
-//
-//        public User() {
-//            // Default constructor required for calls to DataSnapshot.getValue(User.class)
-//        }
-//
-//        public User(String username, String email) {
-//            this.username = username;
-//            this.email = email;
-//        }
-//    }
-//}
