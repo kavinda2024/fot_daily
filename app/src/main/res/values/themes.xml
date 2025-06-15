@@ -2,8 +2,43 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Fot_daily" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Define the primary colors, text colors, etc., here -->
+
+
+
+
+
+        <!-- Button background and text color customization -->
+        <item name="colorPrimary">@color/cyan</item>  <!-- Set the primary color for the app -->
+        <item name="colorPrimaryVariant">@color/cyan</item>  <!-- Set the primary variant -->
+        <item name="colorOnPrimary">@android:color/white</item>  <!-- Set color for text on primary color -->
+
+        <!-- Customize the button style -->
+        <item name="buttonStyle">@style/CustomButtonStyle</item> <!-- Apply custom button style -->
     </style>
 
+    <style name="CustomButtonStyle2">
+        <item name="android:background">@color/black</item>  <!-- Set button background to black for better contrast -->
+        <item name="android:textColor">@android:color/white</item>  <!-- Set button text color to white -->
+
+    </style>
+
+
+    <style name="CustomButtonStyle">
+        <item name="android:background">@color/darkCyan</item>  <!-- Set button background to dark cyan for better contrast -->
+        <item name="android:textColor">@android:color/white</item>  <!-- Set button text color to white -->
+
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+
     <style name="Theme.Fot_daily" parent="Base.Theme.Fot_daily" />
-</resources>
+
+
+
+        </resources>
